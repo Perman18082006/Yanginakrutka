@@ -4,12 +4,12 @@ from aiogram.fsm.context import FSMContext
 # Config
 from config import SUPER_ADMIN
 # States
-from states import Support
+from .states import Support
 
 router = Router()
 
 @router.message(F.text == "☎️ Qo'llab-quvvatlash")
-async def cmd_support(message: Message):
+async def cmd_support(message: Message, state: FSMContext):
     await message.answer("Murojaat matnini yuboring")
     await state.set_state(Support.message)
 
