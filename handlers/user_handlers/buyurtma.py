@@ -70,7 +70,7 @@ async def final_choice(callback: CallbackQuery):
 🔽Min: {min_value}
 🔼Max: {max_value} 
 
-💵 Narxi: {narx} so'm har 1000 tasi uchun""", reply_markup=add_order_kb(service_id))
+💵 Narxi: {narx} so'm har 1000 tasi uchun""", reply_markup=await add_order_kb(service_id))
     await callback.answer()
 
 
