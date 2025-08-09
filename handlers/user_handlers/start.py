@@ -61,7 +61,7 @@ async def start_deeplink_handler(message: Message, command: CommandObject, state
     await message.answer(START_TEXT, reply_markup=menu)
 
 
-@router.message(CommandStart())
+@router.message(CommandStart() | F.text == "⏪ Orqaga", F.from_user.id == SUPER_ADMIN)
 async def start_handler(message: Message):
     user_id = message.from_user.id
     # Foydalanuvchi mavjud emas bo‘lsa qo‘shish

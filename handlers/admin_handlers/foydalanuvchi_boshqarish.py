@@ -51,7 +51,7 @@ async def foydalanuvchi_id(message: Message, state: FSMContext):
  
 
 @router.callback_query(F.data == "pul_qoshish")
-async def pul_qoshish(callback: CallbackQuery, state: FSMContext):
+async def pul_qoshish_handler(callback: CallbackQuery, state: FSMContext):
   await callback.message.delete()
   await callback.message.answer("Pul miqdorini kiriting:")
   await state.set_state(Foydalanuvchi_id.pul_qoshish)
@@ -68,4 +68,5 @@ async def pul_qoshish_money(message: Message, state: FSMContext):
     
   await add_balance(user_id, pul)
   await message.answer("Pul muvaffaqiyatli qo'shildi")
+  await message.bot.send_message(user_id, f"Sizning hisobingizga {pul} so'm qo'shildi")
   await state.clear()
