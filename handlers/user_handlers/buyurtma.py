@@ -3,9 +3,6 @@ from aiogram.types import Message, CallbackQuery
 from aiogram.fsm.context import FSMContext
 # Keyboards
 from keyboards.users_keyboard.users_inline import build_category_keyboard, build_bolim_keyboard, build_xizmat_keyboard, add_order_kb
-# Database funk
-from database_funk.orders_funk import get_service_by_id
-from database_funk.order_funk import get_service_limits
 router = Router()
 
 # Boshlang‘ich tugma (kategoriya tanlash)
@@ -43,42 +40,7 @@ async def select_xizmat(callback: CallbackQuery, state: FSMContext):
     await callback.answer()
 
 
-# Xizmat tanlandi
-@router.callback_query(F.data.startswith("xizmat:"))
-async def final_choice(callback: CallbackQuery):
-    service_id = int(callback.data.split(":")[1])
-    data = await get_service_limits(service_id)
-
-    # Agar data None bo'lsa, xato xabarini ko'rsatish
-    if data is None:
-        await callback.message.edit_text("❌ Bu xizmat API da mavjud emas!")
-        await callback.answer()
-        return
-
-    service_data = await get_service_by_id(service_id)
-    if service_data is None:
-        await callback.message.edit_text("❌ Xizmat topilmadi!")
-        await callback.answer()
-        return
-
-    xizmat_nomi = service_data.get("xizmat_nomi", "Noma'lum")
-    narx = service_data.get("narxi", "Noma'lum")
-    min_value = data.get("min", "Noma'lum")
-    max_value = data.get("max", "Noma'lum")
-
-    await callback.message.edit_text(f"""🆔Xizmat raqami: {service_id}
-⚡️Xizmat nomi: {xizmat_nomi}
-🔽Min: {min_value}
-🔼Max: {max_value} 
-
-💵 Narxi: {narx} so'm har 1000 tasi uchun""", reply_markup=await add_order_kb(service_id))
-    await callback.answer()
-
-
-
-
-
-
+# Xizmat haqida ma'lumot
 
 # Ortga: bolim -> category
 @router.callback_query(F.data == "back:category")

@@ -66,3 +66,8 @@ async def add_order_kb(service_id):
         [InlineKeyboardButton(text="✅️ Buyurtma berish", callback_data=f"add_order:{service_id}")],
         [InlineKeyboardButton(text="⬅️ Ortga", callback_data="back_xizmatlar")]
     ])
+
+async def order_confirm_kb():
+    return InlineKeyboardMarkup(inline_keyboard=[
+        [InlineKeyboardButton(text="✅️ Tasdiqlash", callback_data="confirm_order")]
+    ])

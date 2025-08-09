@@ -9,7 +9,7 @@ from config import BOT_TOKEN
 from database_funk.users_funk import create_users_db, create_users_order
 from database_funk.orders_funk import create_services_table, add_service
 #HANDLERLAR
-from handlers.user_handlers import start, referal, my_balance, support, payment, buyurtma
+from handlers.user_handlers import start, referal, my_balance, support, payment, buyurtma, buyurtma_davomi
 #ADMIN HANDLERLAR
 from handlers.admin_handlers import javob_yoz, panel, statistika, xizmat_qoshish, xizmat_tahrirla, api_qosh, foydalanuvchi_boshqarish
 
@@ -28,6 +28,7 @@ dp.include_router(my_balance.router)
 dp.include_router(support.router)
 dp.include_router(payment.router)
 dp.include_router(buyurtma.router)
+dp.include_router(buyurtma_davomi.router)
 
 #Admin router
 dp.include_router(javob_yoz.router)

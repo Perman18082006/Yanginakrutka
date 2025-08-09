@@ -7,3 +7,8 @@ class Payment(StatesGroup):
     pay1 = State()
     pay2 = State()
     pay3 = State()
+
+class Buyurtma(StatesGroup):
+    amount = State()
+    link = State()
+    confirm = State()
