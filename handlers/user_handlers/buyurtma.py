@@ -55,17 +55,16 @@ async def final_choice(callback: CallbackQuery):
         await callback.answer()
         return
 
-    service_data= await get_service_by_id(service_id)
-    xizmat_nomi = service_data["xizmat_nomi"]    
-    if xizmat_nomi is None:
-        xizmat_nomi = "Noma'lum"
+    service_data = await get_service_by_id(service_id)
+    if service_data is None:
+        await callback.message.edit_text("❌ Xizmat topilmadi!")
+        await callback.answer()
+        return
 
+    xizmat_nomi = service_data.get("xizmat_nomi", "Noma'lum")
+    narx = service_data.get("narxi", "Noma'lum")
     min_value = data.get("min", "Noma'lum")
     max_value = data.get("max", "Noma'lum")
-    service_data = await get_service_by_id(service_id)
-    narx = service_data["narxi"]
-    if narx is None:
-        narx = "Noma'lum"
 
     await callback.message.edit_text(f"""🆔Xizmat raqami: {service_id}
 ⚡️Xizmat nomi: {xizmat_nomi}
