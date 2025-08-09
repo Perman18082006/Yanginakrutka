@@ -2,7 +2,9 @@ from aiogram import Router, F
 from aiogram.types import Message, CallbackQuery
 # Keyboards
 from keyboards.users_keyboard.users_inline import build_category_keyboard, build_bolim_keyboard, build_xizmat_keyboard
-
+# Database funk
+from database_funk.orders_funk import get_service_name
+from database_funk.order_funk import get_service_limits
 router = Router()
 
 # Boshlang‘ich tugma (kategoriya tanlash)
@@ -43,8 +45,17 @@ async def select_xizmat(callback: CallbackQuery):
 @router.callback_query(F.data.startswith("xizmat:"))
 async def final_choice(callback: CallbackQuery):
     service_id = int(callback.data.split(":")[1])
-    await callback.answer()
-    await callback.message.edit_text(f"✅ Tanlangan xizmat ID: {service_id}")
+    data = await get_service_limits(service_id)
+    xizmat_nomi = await get_service_name(service_id)
+    min = data["min"]
+    max = data["max"]
+    narx = await get_service_narxi(service_id)
+    await callback.message.edit_text(f"""🆔Xizmat raqami: {service_id}
+⚡️Xizmat nomi: {xizmat_nomi}
+🔽Min: {min}
+🔼Max: {max} 
+
+💵 Narxi: {narx} so'm har 1000 tasi uchun""")
 
 # Ortga: bolim -> category
 @router.callback_query(F.data == "back:category")

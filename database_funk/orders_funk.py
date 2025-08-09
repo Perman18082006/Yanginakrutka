@@ -60,15 +60,19 @@ async def get_xizmatlar(category, bolim):
         return []
 
 # Xizmatlarni tahrirlash
+
 async def edit_service(service_id: int, **kwargs):
     """
-    Kerakli joyini yangilash.
-    Faqat berilgan maydonlar o'zgaradi, qolganlari o'z holida qoladi.
+    Berilgan service_id bo'yicha kerakli maydonlarni yangilash.
+    Bo'sh string kiritilsa yoki maydon berilmasa, o'zgarishsiz qoladi.
     """
     fields = ["categoria_nomi", "bolim_nomi", "xizmat_nomi", "narxi", "tavsif"]
 
-    # SQL da COALESCE ishlatish uchun tartib bo‘yicha qiymatlar
-    values = [kwargs.get(f) for f in fields] + [service_id]
+    # Bo'sh string => None
+    values = [
+        kwargs.get(f) if kwargs.get(f) not in ("", None) else None
+        for f in fields
+    ] + [service_id]
 
     async with aiosqlite.connect(ORDER_DB) as db:
         await db.execute(f"""
@@ -81,3 +85,34 @@ async def edit_service(service_id: int, **kwargs):
             WHERE service_id = ?
         """, values)
         await db.commit()
+
+
+async def get_service_name(service_id: int) -> str | None:
+    """
+    Berilgan service_id bo'yicha xizmat_nomi ni olish
+    """
+    async with aiosqlite.connect(ORDER_DB) as db:
+        async with db.execute(
+            "SELECT xizmat_nomi FROM services WHERE service_id = ?",
+            (service_id,)
+        ) as cursor:
+            row = await cursor.fetchone()
+
+    return row[0] if row else None
+
+
+async def get_service_narxi(service_id: int) -> float | None:
+    """
+    Berilgan service_id bo'yicha narxini olish
+    """
+    async with aiosqlite.connect(ORDER_DB) as db:
+        async with db.execute(
+            "SELECT narxi FROM services WHERE service_id = ?",
+            (service_id,)
+        ) as cursor:
+            row = await cursor.fetchone()
+
+    if row:
+        return float(row[0])
+    return None
+
