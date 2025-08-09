@@ -17,7 +17,7 @@ async def update_services_cache():
     with open("database/services.json", "w", encoding="utf-8") as f:
         json.dump(services, f, ensure_ascii=False, indent=2)
 
-
+#Ishlatilmayabdi
 async def get_services():
     """
     API dan xizmatlar ro'yxatini olish

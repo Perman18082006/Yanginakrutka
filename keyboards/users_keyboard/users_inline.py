@@ -1,7 +1,7 @@
 from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 from aiogram.utils.keyboard import InlineKeyboardBuilder
 # Database
-from database_funk.orders_funk import get_categories, get_bolimlar, get_xizmatlar, get_service_narxi
+from database_funk.orders_funk import get_categories, get_bolimlar, get_xizmatlar, get_service_by_id
 # Config
 from database.payment_methods import payment_methods
 
@@ -52,7 +52,8 @@ async def build_xizmat_keyboard(category, bolim):
     if xizmatlar:
         builder = InlineKeyboardBuilder()
         for service_id, name in xizmatlar:
-            narx = await get_service_narxi(service_id)
+            service_data = await get_service_by_id(service_id)
+            narx = service_data["narxi"]
             builder.button(text=f"{name} - {narx}", callback_data=f"xizmat:{service_id}")
         builder.button(text="⬅️ Ortga", callback_data=f"back:bolim:{category}")
         builder.adjust(1)

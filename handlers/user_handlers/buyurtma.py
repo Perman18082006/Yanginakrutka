@@ -4,7 +4,7 @@ from aiogram.fsm.context import FSMContext
 # Keyboards
 from keyboards.users_keyboard.users_inline import build_category_keyboard, build_bolim_keyboard, build_xizmat_keyboard, add_order_kb
 # Database funk
-from database_funk.orders_funk import get_service_name, get_service_narxi
+from database_funk.orders_funk import get_service_by_id
 from database_funk.order_funk import get_service_limits
 router = Router()
 
@@ -55,13 +55,15 @@ async def final_choice(callback: CallbackQuery):
         await callback.answer()
         return
 
-    xizmat_nomi = await get_service_name(service_id)
+    service_data= await get_service_by_id(service_id)
+    xizmat_nomi = service_data["xizmat_nomi"]    
     if xizmat_nomi is None:
         xizmat_nomi = "Noma'lum"
 
     min_value = data.get("min", "Noma'lum")
     max_value = data.get("max", "Noma'lum")
-    narx = await get_service_narxi(service_id)
+    service_data = await get_service_by_id(service_id)
+    narx = service_data["narxi"]
     if narx is None:
         narx = "Noma'lum"
 
