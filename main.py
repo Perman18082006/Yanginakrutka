@@ -6,9 +6,12 @@ from aiogram.client.default import DefaultBotProperties
 from config import BOT_TOKEN
 
 #DATABASE FUNKSIYALARNI YUKLAYMIZ
-from database_funk.funk import create_users_db, create_users_order
+from database_funk.users_funk import create_users_db, create_users_order
+from database_funk.orders_funk import create_services_table, add_service
 #HANDLERLAR
-from handlers.user_handlers import start, referal, my_balance, support
+from handlers.user_handlers import start, referal, my_balance, support, payment, buyurtma
+#ADMIN HANDLERLAR
+from handlers.admin_handlers import javob_yoz, panel, statistika, xizmat_qoshish, xizmat_tahrirla, api_qosh
 
 # Create bot and dispatcher
 bot = Bot(
@@ -23,13 +26,25 @@ dp.include_router(start.router)
 dp.include_router(referal.router)
 dp.include_router(my_balance.router)
 dp.include_router(support.router)
+dp.include_router(payment.router)
+dp.include_router(buyurtma.router)
 
+#Admin router
+dp.include_router(javob_yoz.router)
+dp.include_router(panel.router)
+dp.include_router(statistika.router)
+dp.include_router(xizmat_qoshish.router)
+dp.include_router(xizmat_tahrirla.router)
+dp.include_router(api_qosh.router)
 
 
 async def main():
     # Create database tables
     await create_users_db()
     await create_users_order()
+    await create_services_table()
+    # Add services
+    await add_service(1, "Kategoriya 1", "Bo'lim 1", "Xizmat 1", 100, "Tavsif 1")
     # Start bot
     logging.info("Starting bot...")
     await dp.start_polling(bot)

@@ -1,0 +1,1 @@
+ADMINGA_XABAR = "Yangi murojaat:\n\n{user_message}\n\nFoydalanuvchi ID: {user_id}"

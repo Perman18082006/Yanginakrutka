@@ -1,0 +1,25 @@
+from aiogram.fsm.state import State, StatesGroup
+
+class Xizmat_qosh(StatesGroup):
+    service_id = State()
+    categoria_nomi = State()
+    bolim_nomi = State()
+    xizmat_nomi = State()
+    narxi = State()
+    tavsif = State()
+    tasdiqlash = State()
+
+class Xizmat_id(StatesGroup):
+    xizmat_id = State()
+
+class Xizmat_tahrir(StatesGroup):
+    kategoriya = State()
+    bolim = State()
+    xizmat = State()
+    narx = State()
+    tavsif = State()
+    tasdiqlash = State()
+
+class API_qosh(StatesGroup):
+    api_url = State()
+    api_key = State()

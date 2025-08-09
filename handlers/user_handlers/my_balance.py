@@ -1,17 +1,19 @@
 from aiogram import Router, F
 from aiogram.types import Message
+from aiogram.fsm.context import FSMContext
 # Vaqtni olish uchun
 from datetime import datetime
 from zoneinfo import ZoneInfo
 # TEXTLAR
 from texts.user_texts import MY_BALANCE
 # DATABASE FUNKSIYALAR
-from database_funk.funk import get_user_data
+from database_funk.users_funk import get_user_data
 
 router = Router()
 
 @router.message(F.text == "👤Mening hisobim")
-async def cmd_my_balance(message: Message):
+async def cmd_my_balance(message: Message, state: FSMContext):
+    await state.clear()
     user_id = message.from_user.id
     # Toshkent vaqti
     vaqt = datetime.now(ZoneInfo("Asia/Tashkent")).strftime("%Y-%m-%d %H:%M:%S")

@@ -1,7 +1,18 @@
-BOT_TOKEN = "8048322300:AAEnOWyKOkRxHl2NWW7OZrnXGB9O2S-KsEc"
+BOT_TOKEN = "7002570947:AAEPaTfgtnRwsX_VzDTJplBxerNPqi2HfCc"
 
 referal_price = 255
 
 DB_NAME = "database/users.db"
 
 SUPER_ADMIN = 7547413961
+
+FIO = "Shamuratov Perman"
+karta = "8600 0000 0000 0000"
+min_pay = 1000
+max_pay = 1000000
+
+API_KEY = "6fa37e02dade47d723f3c1b45a822b2f"  # <-- O'z API kalitingizni qo'ying
+API_URL = "https://topsmm.uz/api/v2"
+
+ORDER_DB = "database/orders.db"
+JSON_FILE = "database/data.json"

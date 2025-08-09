@@ -1,0 +1,60 @@
+from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
+from aiogram.utils.keyboard import InlineKeyboardBuilder
+# Database
+from database_funk.orders_funk import get_categories, get_bolimlar, get_xizmatlar
+# Config
+from database.payment_methods import payment_methods
+
+
+def payment_keyboard():
+    keyboard = []
+    for key, value in payment_methods.items():
+        keyboard.append([InlineKeyboardButton(text=value, callback_data=f"pay:{key}")])
+    return InlineKeyboardMarkup(inline_keyboard=keyboard)
+
+
+def tolov_qildim():
+    return InlineKeyboardMarkup(inline_keyboard=[
+        [InlineKeyboardButton(text="✅️To'lov qildim", callback_data="tolov_qildim")],
+        [InlineKeyboardButton(text="🔙Orqaga qaytish", callback_data="cancel")]
+    ])
+
+
+# Kategoriyalar keyboard
+async def build_category_keyboard():
+    categories = await get_categories()
+    if categories:
+        builder = InlineKeyboardBuilder()
+        for cat in categories:
+            builder.button(text=cat, callback_data=f"cat:{cat}")
+        builder.button(text="⬅️ Ortga", callback_data="back")
+        builder.adjust(1)
+        return builder.as_markup()
+    else:
+        return False
+
+# Bolimlar keyboard
+async def build_bolim_keyboard(category):
+    bolimlar = await get_bolimlar(category)
+    if bolimlar:
+        builder = InlineKeyboardBuilder()
+        for bolim in bolimlar:
+            builder.button(text=bolim, callback_data=f"bolim:{category}:{bolim}")
+        builder.button(text="⬅️ Ortga", callback_data="back:category")
+        builder.adjust(1)
+        return builder.as_markup()
+    else:
+        return False
+
+# Xizmatlar keyboard
+async def build_xizmat_keyboard(category, bolim):
+    xizmatlar = await get_xizmatlar(category, bolim)
+    if xizmatlar:
+        builder = InlineKeyboardBuilder()
+        for service_id, name in xizmatlar:
+            builder.button(text=name, callback_data=f"xizmat:{service_id}")
+        builder.button(text="⬅️ Ortga", callback_data=f"back:bolim:{category}")
+        builder.adjust(1)
+        return builder.as_markup()
+    else:
+        return False
