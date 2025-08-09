@@ -87,32 +87,30 @@ async def edit_service(service_id: int, **kwargs):
         await db.commit()
 
 
-async def get_service_name(service_id: int) -> str | None:
+async def get_service_by_id(service_id: int) -> dict | None:
     """
-    Berilgan service_id bo'yicha xizmat_nomi ni olish
-    """
-    async with aiosqlite.connect(ORDER_DB) as db:
-        async with db.execute(
-            "SELECT xizmat_nomi FROM services WHERE service_id = ?",
-            (service_id,)
-        ) as cursor:
-            row = await cursor.fetchone()
-
-    return row[0] if row else None
-
-
-async def get_service_narxi(service_id: int) -> float | None:
-    """
-    Berilgan service_id bo'yicha narxini olish
+    Berilgan service_id bo'yicha barcha ustunlarni lug'at shaklida qaytaradi.
     """
     async with aiosqlite.connect(ORDER_DB) as db:
         async with db.execute(
-            "SELECT narxi FROM services WHERE service_id = ?",
+            """
+            SELECT service_id, categoria_nomi, bolim_nomi, xizmat_nomi, narxi, tavsif, buyurtma_soni, sarflangan_summa
+            FROM services
+            WHERE service_id = ?
+            """,
             (service_id,)
         ) as cursor:
             row = await cursor.fetchone()
 
     if row:
-        return float(row[0])
+        return {
+            "service_id": row[0],
+            "categoria_nomi": row[1],
+            "bolim_nomi": row[2],
+            "xizmat_nomi": row[3],
+            "narxi": float(row[4]),
+            "tavsif": row[5],
+            "buyurtma_soni": row[6],
+            "sarflangan_summa": float(row[7])
+        }
     return None
-
