@@ -11,7 +11,7 @@ from database_funk.orders_funk import create_services_table, add_service
 #HANDLERLAR
 from handlers.user_handlers import start, referal, my_balance, support, payment, buyurtma
 #ADMIN HANDLERLAR
-from handlers.admin_handlers import javob_yoz, panel, statistika, xizmat_qoshish, xizmat_tahrirla, api_qosh
+from handlers.admin_handlers import javob_yoz, panel, statistika, xizmat_qoshish, xizmat_tahrirla, api_qosh, foydalanuvchi_boshqarish
 
 # Create bot and dispatcher
 bot = Bot(
@@ -36,6 +36,7 @@ dp.include_router(statistika.router)
 dp.include_router(xizmat_qoshish.router)
 dp.include_router(xizmat_tahrirla.router)
 dp.include_router(api_qosh.router)
+dp.include_router(foydalanuvchi_boshqarish.router)
 
 
 async def main():

@@ -1,7 +1,6 @@
 {
     "referal_price": 100,
     "API_URL": "https://topsmm.uz/api/v2",
-    "API_KEY": "",
     "kanallar": [
         -1007877788
     ],
@@ -12,5 +11,6 @@
     "FIO": "Shamuradov Perman",
     "karta": "8600 1111 2222 3333",
     "min_pay": 1000,
-    "max_pay": 100000
+    "max_pay": 100000,
+    "API_KEY": "6fa37e02dade47d723f3c1b45a822b2f"
 }

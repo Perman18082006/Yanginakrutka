@@ -30,6 +30,14 @@ async def api_qoshish(callback: CallbackQuery, state: FSMContext):
   await state.set_state(API_qosh.api_key)
   await callback.answer()
 
+@router.callback_query(F.data == "api_tahrirlash")
+async def api_tahrirlash(callback: CallbackQuery, state: FSMContext):
+  await callback.message.delete()
+  await callback.message.answer("Yangi API kalitni kiriting:")
+  await state.set_state(API_qosh.api_key)
+  await callback.answer()
+
+
 @router.message(API_qosh.api_key)
 async def api_key(message: Message, state: FSMContext):
   if await check_api_key(API_URL, message.text):
@@ -39,4 +47,5 @@ async def api_key(message: Message, state: FSMContext):
     await message.answer("API kalit noto'g'ri. Iltimos, qayta urinib ko'ring.")
     return
   await state.clear()
+
 

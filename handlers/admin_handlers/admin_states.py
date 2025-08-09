@@ -23,3 +23,7 @@ class Xizmat_tahrir(StatesGroup):
 class API_qosh(StatesGroup):
     api_url = State()
     api_key = State()
+
+class Foydalanuvchi_id(StatesGroup):
+    user_id = State()
+    pul_qoshish = State()

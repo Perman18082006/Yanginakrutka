@@ -64,3 +64,10 @@ api_tahrirla = InlineKeyboardMarkup(
             InlineKeyboardButton(text="✏️ API tahrirlash", callback_data="api_tahrirlash")
         ]
     ])
+
+pul_qoshish = InlineKeyboardMarkup(
+    inline_keyboard=[
+        [
+            InlineKeyboardButton(text="➕️ Pul qo'shish", callback_data="pul_qoshish")
+        ]
+    ])
