@@ -25,9 +25,9 @@ async def select_bolim(callback: CallbackQuery):
         await callback.message.edit_text(f"🖇Quyidagi xizmatlardan birini tanlang: ({category})", reply_markup=keyboard)
     else:
         await callback.message.edit_text("🚫Bo‘limlar mavjud emas!")
-        
+
     await callback.answer()
-    
+
 # Xizmatlar chiqarish
 @router.callback_query(F.data.startswith("bolim:"))
 async def select_xizmat(callback: CallbackQuery):
@@ -46,16 +46,30 @@ async def select_xizmat(callback: CallbackQuery):
 async def final_choice(callback: CallbackQuery):
     service_id = int(callback.data.split(":")[1])
     data = await get_service_limits(service_id)
+
+    # Agar data None bo'lsa, xato xabarini ko'rsatish
+    if data is None:
+        await callback.message.edit_text("❌ Bu xizmat API da mavjud emas!")
+        await callback.answer()
+        return
+
     xizmat_nomi = await get_service_name(service_id)
-    min = data["min"]
-    max = data["max"]
+    if xizmat_nomi is None:
+        xizmat_nomi = "Noma'lum"
+
+    min_value = data.get("min", "Noma'lum")
+    max_value = data.get("max", "Noma'lum")
     narx = await get_service_narxi(service_id)
+    if narx is None:
+        narx = "Noma'lum"
+
     await callback.message.edit_text(f"""🆔Xizmat raqami: {service_id}
 ⚡️Xizmat nomi: {xizmat_nomi}
-🔽Min: {min}
-🔼Max: {max} 
+🔽Min: {min_value}
+🔼Max: {max_value} 
 
 💵 Narxi: {narx} so'm har 1000 tasi uchun""")
+    await callback.answer()
 
 # Ortga: bolim -> category
 @router.callback_query(F.data == "back:category")
