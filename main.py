@@ -44,8 +44,6 @@ async def main():
     await create_users_db()
     await create_users_order()
     await create_services_table()
-    # Add services
-    await add_service(1, "Kategoriya 1", "Bo'lim 1", "Xizmat 1", 100, "Tavsif 1")
     # Start bot
     logging.info("Starting bot...")
     await dp.start_polling(bot)
