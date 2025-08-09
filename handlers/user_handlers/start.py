@@ -32,7 +32,7 @@ async def start_deeplink_handler(message: Message, command: CommandObject, state
         if temp_id != user_id:
             referal_id = temp_id
 
-    # Foydalanuvchi mavjud emas bo‘lsa qo‘shish
+    # Foydalanuvchi mavjud emas bo'lsa qo'shish
     if not await user_exists(user_id):
         await add_user(user_id, referal_id)
 
@@ -61,16 +61,30 @@ async def start_deeplink_handler(message: Message, command: CommandObject, state
     await message.answer(START_TEXT, reply_markup=menu)
 
 
-@router.message(CommandStart() | F.text == "⏪ Orqaga", F.from_user.id == SUPER_ADMIN)
-async def start_handler(message: Message):
+@router.message(CommandStart(), F.from_user.id == SUPER_ADMIN)
+async def start_handler_admin(message: Message):
     user_id = message.from_user.id
-    # Foydalanuvchi mavjud emas bo‘lsa qo‘shish
+    # Foydalanuvchi mavjud emas bo'lsa qo'shish
     if not await user_exists(user_id):
         await add_user(user_id)
-    if user_id == SUPER_ADMIN:
-        await message.answer(START_TEXT, reply_markup=admin_menu)
-    else:
-        await message.answer(START_TEXT, reply_markup=menu)
+    await message.answer(START_TEXT, reply_markup=admin_menu)
+
+@router.message(F.text == "⏪ Orqaga", F.from_user.id == SUPER_ADMIN)
+async def back_handler_admin(message: Message):
+    user_id = message.from_user.id
+    # Foydalanuvchi mavjud emas bo'lsa qo'shish
+    if not await user_exists(user_id):
+        await add_user(user_id)
+    await message.answer(START_TEXT, reply_markup=admin_menu)
+
+@router.message(CommandStart())
+async def start_handler_user(message: Message):
+    user_id = message.from_user.id
+    # Foydalanuvchi mavjud emas bo'lsa qo'shish
+    if not await user_exists(user_id):
+        await add_user(user_id)
+    await message.answer(START_TEXT, reply_markup=menu)
+
 @router.message(F.text == "🚫 Bekor qilish")
 async def cancel_handler(message: Message, state: FSMContext):
     await message.answer("🏠Asosiy menyudasiz", reply_markup=menu)
