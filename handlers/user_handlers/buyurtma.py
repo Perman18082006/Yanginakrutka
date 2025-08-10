@@ -21,9 +21,15 @@ async def select_bolim(callback: CallbackQuery):
     category = callback.data.split(":", 1)[1]
     keyboard = await build_bolim_keyboard(category)
     if keyboard:
-        await callback.message.edit_text(f"🖇Quyidagi xizmatlardan birini tanlang: ({category})", reply_markup=keyboard)
+        try:
+            await callback.message.edit_text(f"🖇Quyidagi xizmatlardan birini tanlang: ({category})", reply_markup=keyboard)
+        except Exception:
+            pass
     else:
-        await callback.message.edit_text("🚫Bo‘limlar mavjud emas!")
+        try:
+            await callback.message.edit_text("🚫Bo'limlar mavjud emas!")
+        except Exception:
+            pass
 
     try:
         await callback.answer()
@@ -37,9 +43,15 @@ async def select_xizmat(callback: CallbackQuery, state: FSMContext):
     await state.update_data(bolim=bolim, category=category)
     keyboard = await build_xizmat_keyboard(category, bolim)
     if keyboard:
-        await callback.message.edit_text(f"✅O'zingizga kerakli xizmatni tanlang: ({category} → {bolim})", reply_markup=keyboard)
+        try:
+            await callback.message.edit_text(f"✅O'zingizga kerakli xizmatni tanlang: ({category} → {bolim})", reply_markup=keyboard)
+        except Exception:
+            pass
     else:
-        await callback.message.edit_text("🚫Xizmatlar mavjud emas!")
+        try:
+            await callback.message.edit_text("🚫Xizmatlar mavjud emas!")
+        except Exception:
+            pass
 
     try:
         await callback.answer()
@@ -68,9 +80,15 @@ async def back_to_bolim(callback: CallbackQuery):
     category = callback.data.split(":")[2]
     keyboard = await build_bolim_keyboard(category)
     if keyboard:
-        await callback.message.edit_text(f"🖇Quyidagi xizmatlardan birini tanlang: ({category})", reply_markup=keyboard)
+        try:
+            await callback.message.edit_text(f"🖇Quyidagi xizmatlardan birini tanlang: ({category})", reply_markup=keyboard)
+        except Exception:
+            pass
     else:
-        await callback.message.edit_text("🚫Bo‘limlar mavjud emas!")
+        try:
+            await callback.message.edit_text("🚫Bo'limlar mavjud emas!")
+        except Exception:
+            pass
     try:
         await callback.answer()
     except Exception:
@@ -83,9 +101,15 @@ async def back_to_xizmatlar(callback: CallbackQuery, state: FSMContext):
     bolim = data.get("bolim")
     keyboard = await build_xizmat_keyboard(category, bolim)
     if keyboard:
-        await callback.message.edit_text(f"✅O'zingizga kerakli xizmatni tanlang: ({category} → {bolim})", reply_markup=keyboard)
+        try:
+            await callback.message.edit_text(f"✅O'zingizga kerakli xizmatni tanlang: ({category} → {bolim})", reply_markup=keyboard)
+        except Exception:
+            pass
     else:
-        await callback.message.edit_text("🚫Xizmatlar mavjud emas!")
+        try:
+            await callback.message.edit_text("🚫Xizmatlar mavjud emas!")
+        except Exception:
+            pass
     try:
         await callback.answer()
     except Exception:
