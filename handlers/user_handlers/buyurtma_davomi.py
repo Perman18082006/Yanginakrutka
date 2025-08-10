@@ -5,7 +5,7 @@ import re
 
 # Database funk
 from database_funk.orders_funk import get_service_by_id
-from database_funk.order_funk import get_service_limits
+from database_funk.order_funk import get_service_limits, add_order
 # Keyboards
 from keyboards.users_keyboard.users_inline import add_order_kb, order_confirm_kb
 # states

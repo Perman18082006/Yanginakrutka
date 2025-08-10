@@ -10,11 +10,12 @@ from keyboards.admin_keyboard.admin_inline import api_tahrirla, api_qosh
 from .admin_states import API_qosh
 # Config
 from config import API_URL
-
+# Filter
+from filters import IsAdmin
 
 router = Router()
 
-@router.message(F.text == "🔑 API")
+@router.message(F.text == "🔑 API", IsAdmin())
 async def api_qosh_tah(message: Message, state: FSMContext):
   await state.clear()
   data = await read_json()

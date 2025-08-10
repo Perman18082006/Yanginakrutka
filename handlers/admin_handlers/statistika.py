@@ -3,9 +3,11 @@ from aiogram.types import Message
 from aiogram.fsm.context import FSMContext
 # Database funk
 from database_funk.users_funk import get_all_user_ids
+# Filter
+from filters import IsAdmin
 router = Router()
 
-@router.message(F.text == "📊 Statistika")
+@router.message(F.text == "📊 Statistika", IsAdmin())
 async def statistika_handler(message: Message, state: FSMContext):
     await state.clear()
     users = await get_all_user_ids()

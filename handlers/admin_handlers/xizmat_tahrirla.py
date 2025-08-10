@@ -9,9 +9,13 @@ from keyboards.admin_keyboard.admin_reply import boshqaruv
 from .admin_states import Xizmat_tahrir, Xizmat_id
 # Database funk
 from database_funk.orders_funk import edit_service
+# Filter
+from filters import IsAdmin
+
+
 router = Router()
 
-@router.message(F.text == "🛠️ Xizmatlarni tah/qosh")
+@router.message(F.text == "🛠️ Xizmatlarni tah/qosh", IsAdmin())
 async def xizmat_tahrirla_handler(message: Message, state: FSMContext):
     await message.answer("Quyidagilardan birini tanlang:", reply_markup=xizmat_tah_qosh)
     await state.clear()

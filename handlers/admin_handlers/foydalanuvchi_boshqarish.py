@@ -16,10 +16,13 @@ from keyboards.admin_keyboard.admin_reply import boshqaruv
 from keyboards.admin_keyboard.admin_inline import pul_qoshish
 # Funk
 from database_funk.users_funk import user_exists, add_balance
+#Filter
+from filters import IsAdmin
+
 
 router = Router()
 
-@router.message(F.text == "🧑‍💻 Foydalanuvchini boshqarish")
+@router.message(F.text == "🧑‍💻 Foydalanuvchini boshqarish", IsAdmin())
 async def foydalanuvchi_boshqarish(message: Message, state: FSMContext):
   await state.clear()
   await message.answer("Foydalanuvchini id raqamini kiriting:", reply_markup=boshqaruv)
