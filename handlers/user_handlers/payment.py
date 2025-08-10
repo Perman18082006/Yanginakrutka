@@ -20,7 +20,8 @@ router = Router()
 
 
 @router.message(F.text == "💰Hisob toʻldirish")
-async def cmd_payment(message: Message):
+async def cmd_payment(message: Message, state: FSMContext):
+    await state.clear()
     await message.answer("💵To'lov turini tanlang!", reply_markup=payment_keyboard()) 
 
 @router.callback_query(F.data == "cancel")

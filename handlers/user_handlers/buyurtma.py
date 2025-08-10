@@ -7,7 +7,8 @@ router = Router()
 
 # Boshlang‘ich tugma (kategoriya tanlash)
 @router.message(F.text == "🗂 Xizmatlar")
-async def select_category(message: Message):
+async def select_category(message: Message, state: FSMContext):
+    await state.clear()
     keyboard = await build_category_keyboard()
     if keyboard:
         await message.answer("🖇Quyidagilardan tarmoqlardan birini tanlang:", reply_markup=keyboard)
