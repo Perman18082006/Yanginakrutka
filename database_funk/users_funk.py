@@ -99,7 +99,7 @@ async def add_order(order_id, user_id, nomi, xizmat_turi, linkin, narxi):
     async with aiosqlite.connect(DB_NAME) as db:
         await db.execute("""
             INSERT INTO users_order (
-                order_id, user_id, nomi, xizma_turi, linkin, narxi, vaqti
+                order_id, user_id, nomi, xizmat_turi, linkin, narxi, vaqti
             ) VALUES (?, ?, ?, ?, ?, ?, ?)
         """, (order_id, user_id, nomi, xizmat_turi, linkin, narxi, vaqt))
         await db.commit()

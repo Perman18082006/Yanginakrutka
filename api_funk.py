@@ -38,9 +38,9 @@ async def get_min_by_service_id(service_id: int) -> int | None:
 
 async def add_order(service_id: int, link: str, quantity: int):
     response = await make_post_request("add", {
-    "service": 123,
-    "link": "https://example.com",
-    "quantity": 100
+        "service": service_id,
+        "link": link,
+        "quantity": quantity
     })
     return response
 

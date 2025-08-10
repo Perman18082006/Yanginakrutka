@@ -49,7 +49,7 @@ async def process_payment_amount(message: Message, state: FSMContext):
         await message.answer("💰To'lov qilingan pul miqdorini kiriting!")
         return
     if int(amount) < min_pay or int(amount) > max_pay:
-        await message.answer(f"💰To'lov qilingan pul miqdorini {min_pay} so'mdan {max_pay}")
+        await message.answer(f"💰To'lov miqdori {min_pay} so'mdan {max_pay} so'mgacha bo'lishi kerak!")
         return
     await state.update_data(amount=amount)
     await message.answer("✅Qabul qilindi. Endi to'lov chekini yuboring!\n\n‼️To'lov chekini faqat rasm ko'rinishida yuboring hamda 1 ta chekni qayta-qayta yubormang!")
