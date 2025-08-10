@@ -10,7 +10,7 @@ from keyboards.admin_keyboard.admin_inline import admin_tasdiqla
 # Texts
 from texts.user_texts import PAY1
 # Config
-from config import karta, FIO, min_pay, max_pay, SUPER_ADMIN
+from config import karta, FIO, min_pay, max_pay, ADMIN_IDS
 # States
 from .states import Payment
 # Database
@@ -65,6 +65,7 @@ async def process_payment_receipt(message: Message, state: FSMContext):
     await message.answer("✅To'lov qabul qilindi. Tez orada hisobingizga pul o'tkaziladi!")
     await state.clear()
     # To'lovni adminlarga yuborish
-    await message.bot.send_photo(SUPER_ADMIN, receipt, caption=f"To'lov turi: {payment_method}\nTo'lov miqdori: {amount} so'm\nTo'lovchi: {message.from_user.id}", reply_markup=admin_tasdiqla(user_id, amount))
+    for admin in ADMIN_IDS:
+        await message.bot.send_photo(admin, receipt, caption=f"To'lov turi: {payment_method}\nTo'lov miqdori: {amount} so'm\nTo'lovchi: {message.from_user.id}", reply_markup=admin_tasdiqla(user_id, amount))
 
 

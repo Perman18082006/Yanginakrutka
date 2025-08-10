@@ -8,6 +8,7 @@ from database_funk.orders_funk import get_service_by_id
 from database_funk.order_funk import get_service_limits, add_order
 # Keyboards
 from keyboards.users_keyboard.users_inline import add_order_kb, order_confirm_kb
+from keyboards.users_keyboard.users_reply import cancel
 # states
 from .states import Buyurtma
 
@@ -59,7 +60,7 @@ async def add_order_handler(callback: CallbackQuery, state: FSMContext):
     await state.update_data(service_id=service_id)
     min = data.get("min", 0)
     max = data.get("max", 0)
-    await callback.message.answer(f"✅ Xizmat miqdorini kiriting:\n\n🔽Min: {min}\n🔼Max: {max}")
+    await callback.message.answer(f"✅ Xizmat miqdorini kiriting:\n\n🔽Min: {min}\n🔼Max: {max}", reply_markup=cancel)
     await state.set_state(Buyurtma.amount)
     await callback.answer()
 
