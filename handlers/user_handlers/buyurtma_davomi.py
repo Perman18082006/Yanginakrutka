@@ -117,12 +117,14 @@ async def process_link(message: Message, state: FSMContext):
     service_data = await get_service_by_id(service_id)
     xizmat_nomi = service_data.get("xizmat_nomi", "Noma'lum")
     narx = service_data.get("narxi", "Noma'lum")
+    price = int(amount) * int(narx) / 1000
+    await state.update_data(xizmat_nomi=xizmat_nomi, price=price)
     await message.answer(f"""✅ Buyurtma tasdiqlash:
 🆔Xizmat raqami: {service_id}
 ⚡️Xizmat nomi: {xizmat_nomi}
 🔽Miqdor: {amount}
 🔗Link: {link}
-💵 Narxi: {narx} so'm har 1000 tasi uchun""", reply_markup=await order_confirm_kb(), disable_web_page_preview=True)
+💵 Narxi: {price}""", reply_markup=await order_confirm_kb(), disable_web_page_preview=True)
     await state.set_state(Buyurtma.confirm)
 
 @router.callback_query(Buyurtma.confirm, F.data == "confirm_order")
@@ -131,11 +133,13 @@ async def confirm_order(callback: CallbackQuery, state: FSMContext):
     service_id = data.get("service_id")
     amount = data.get("amount")
     link = data.get("link")
+    xizmat_nomi = data.get("xizmat_nomi")
+    price = data.get("price")
     response = await add_order(service_id, link, amount)
     if response.get("order"):
         order_id = response.get("order")
         await callback.message.edit_text(f"✅ Buyurtma qabul qilindi!\n\n🆔 Buyurtma raqami: {order_id}")
-        await add_order_db(order_id, service_id, amount, link, callback.from_user.id)
+        await add_order_db(user_id, order_id, xizmat_nomi, link, amount, price)
     else:
         error_text = response.get("error", "Nomaʼlum xatolik yuz berdi.")
         if error_text == "neworder.error.link_duplicate":
