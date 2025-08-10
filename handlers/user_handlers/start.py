@@ -93,6 +93,6 @@ async def cancel_handler(message: Message, state: FSMContext):
 @router.callback_query(F.data == "back")
 async def back_handler(callback: CallbackQuery, state: FSMContext):
     await callback.message.answer("🏠Asosiy menyudasiz", reply_markup=menu)
-    await callback.delete()
+    await callback.message.delete()
     await state.clear()
     await callback.answer()
