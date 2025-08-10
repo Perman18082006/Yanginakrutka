@@ -4,4 +4,4 @@ from config import ADMIN_IDS
 
 class IsAdmin(BaseFilter):
     async def __call__(self, message: Message) -> bool:
-        return message.from_user.id in self.ADMIN_IDS
+        return message.from_user.id in ADMIN_IDS
