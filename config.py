@@ -11,7 +11,7 @@ karta = "8600 0000 0000 0000"
 min_pay = 1000
 max_pay = 1000000
 
-API_KEY = "6fa37e02dade47d723f3c1b45a822b2f"  # <-- O'z API kalitingizni qo'ying
+API_KEY = "4c5077fe42de13a9f853956a9ee9c2b0"  # <-- O'z API kalitingizni qo'ying
 API_URL = "https://topsmm.uz/api/v2"
 
 ORDER_DB = "database/orders.db"
