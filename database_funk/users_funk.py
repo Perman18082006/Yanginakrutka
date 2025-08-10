@@ -27,9 +27,9 @@ async def create_users_order():
                 user_id INTEGER PRIMARY KEY,
                 order_id INTEGER,
                 xizmat_turi TEXT,
-                linkin TEXT,
+                link TEXT,
                 amount INTEGER,
-                narxi INTEGER,
+                narx INTEGER,
                 vaqt TEXT
             )
         """)
@@ -93,15 +93,15 @@ async def get_user_data(user_id):
         return None
 
 
-async def add_order_db(order_id, service_id, amount, link, user_id):
+async def add_order_db(user_id, order_id, xizmat_nomi, link, amount, narx):
     # Toshkent vaqti
     vaqt = datetime.now(ZoneInfo("Asia/Tashkent")).strftime("%Y-%m-%d %H:%M:%S")
     async with aiosqlite.connect(DB_NAME) as db:
         await db.execute("""
             INSERT INTO users_order (
-                user_id, order_id, xizmat_turi, linkin, amount, narxi, vaqt
+                user_id, order_id, xizmat_turi, link, amount, narx, vaqt
             ) VALUES (?, ?, ?, ?, ?, ?, ?)
-        """, (user_id, order_id, service_id, link, amount, 0, vaqt))
+        """, (user_id, order_id, xizmat_nomi, link, amount, narx, vaqt))
         await db.commit()
 
 
@@ -119,7 +119,7 @@ async def get_orders_by_user(user_id):
                 "xizmat_turi": row[2],
                 "link": row[3],
                 "amount": row[4],
-                "narxi": row[5],
+                "narx": row[5],
                 "vaqt": row[6]
             } for row in rows
         ]

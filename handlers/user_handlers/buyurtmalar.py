@@ -12,6 +12,6 @@ async def buyurtmalar(message: Message):
         await message.answer("Sizda hali buyurtma yo'q!")
         return
     for order in orders:
-        await message.answer(f"🆔 Buyurtma raqami: {order['order_id']}\n⚡️ Xizmat nomi: {order['xizmat_nomi']}\n🔽 Miqdor: {order['amount']}\n🔗 Link: {order['link']}\n💵 Narxi: {order['narxi']} so'm\n📅 Vaqt: {order['vaqt']}\n🔍 Holati: aniqlanmagan")
+        await message.answer(f"🆔 Buyurtma raqami: {order['order_id']}\n⚡️ Xizmat nomi: {order['xizmat_turi']}\n🔽 Miqdor: {order['amount']}\n🔗 Link: {order['link']}\n💵 Narxi: {order['narx']} so'm\n📅 Vaqt: {order['vaqt']}\n🔍 Holati: aniqlanmagan", disable_web_page_preview=True)
     
     
