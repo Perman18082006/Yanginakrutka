@@ -93,15 +93,15 @@ async def get_user_data(user_id):
         return None
 
 
-async def add_order_db(user_id, order_id, xizmat_turi, link, amount, narxi):
+async def add_order_db(order_id, service_id, amount, link, user_id):
     # Toshkent vaqti
     vaqt = datetime.now(ZoneInfo("Asia/Tashkent")).strftime("%Y-%m-%d %H:%M:%S")
     async with aiosqlite.connect(DB_NAME) as db:
         await db.execute("""
             INSERT INTO users_order (
-                user_id, order_id, xizmat_turi, link, amount, narxi, vaqt
-            ) VALUES (?, ?, ?, ?, ?, ?)
-        """, (user_id, order_id, xizmat_turi, link, amount, narxi, vaqt))
+                user_id, order_id, xizmat_turi, linkin, amount, narxi, vaqt
+            ) VALUES (?, ?, ?, ?, ?, ?, ?)
+        """, (user_id, order_id, service_id, link, amount, 0, vaqt))
         await db.commit()
 
 
@@ -109,7 +109,7 @@ async def get_orders_by_user(user_id):
     async with aiosqlite.connect(DB_NAME) as db:
         cursor = await db.execute("""
             SELECT * FROM users_order WHERE user_id = ?
-            ORDER BY vaqti DESC
+            ORDER BY vaqt DESC
         """, (user_id,))
         rows = await cursor.fetchall()
         return [
