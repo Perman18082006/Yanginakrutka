@@ -129,6 +129,7 @@ async def process_link(message: Message, state: FSMContext):
 
 @router.callback_query(Buyurtma.confirm, F.data == "confirm_order")
 async def confirm_order(callback: CallbackQuery, state: FSMContext):
+    user_id = callback.from_user.id
     data = await state.get_data()
     service_id = data.get("service_id")
     amount = data.get("amount")
