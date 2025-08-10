@@ -24,13 +24,13 @@ async def create_users_order():
     async with aiosqlite.connect(DB_NAME) as db:
         await db.execute("""
             CREATE TABLE IF NOT EXISTS users_order (
-                order_id INTEGER PRIMARY KEY,
-                user_id INTEGER,
-                nomi TEXT,
+                user_id INTEGER PRIMARY KEY,
+                order_id INTEGER,
                 xizmat_turi TEXT,
                 linkin TEXT,
+                amount INTEGER,
                 narxi INTEGER,
-                vaqti TEXT
+                vaqt TEXT
             )
         """)
         await db.commit()
@@ -93,15 +93,15 @@ async def get_user_data(user_id):
         return None
 
 
-async def add_order(order_id, user_id, nomi, xizmat_turi, linkin, narxi):
+async def add_order_db(user_id, order_id, xizmat_turi, link, amount, narxi):
     # Toshkent vaqti
     vaqt = datetime.now(ZoneInfo("Asia/Tashkent")).strftime("%Y-%m-%d %H:%M:%S")
     async with aiosqlite.connect(DB_NAME) as db:
         await db.execute("""
             INSERT INTO users_order (
-                order_id, user_id, nomi, xizmat_turi, linkin, narxi, vaqti
-            ) VALUES (?, ?, ?, ?, ?, ?, ?)
-        """, (order_id, user_id, nomi, xizmat_turi, linkin, narxi, vaqt))
+                user_id, order_id, xizmat_turi, link, amount, narxi, vaqt
+            ) VALUES (?, ?, ?, ?, ?, ?)
+        """, (user_id, order_id, xizmat_turi, link, amount, narxi, vaqt))
         await db.commit()
 
 
@@ -114,13 +114,13 @@ async def get_orders_by_user(user_id):
         rows = await cursor.fetchall()
         return [
             {
-                "order_id": row[0],
-                "user_id": row[1],
-                "nomi": row[2],
-                "xizmat_turi": row[3],
-                "linkin": row[4],
+                "user_id": row[0],
+                "order_id": row[1],
+                "xizmat_turi": row[2],
+                "link": row[3],
+                "amount": row[4],
                 "narxi": row[5],
-                "vaqti": row[6]
+                "vaqt": row[6]
             } for row in rows
         ]
 

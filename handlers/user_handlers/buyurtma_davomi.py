@@ -6,6 +6,7 @@ import re
 # Database funk
 from database_funk.orders_funk import get_service_by_id
 from database_funk.order_funk import get_service_limits, add_order
+from database_funk.users_funk import add_order_db
 # Keyboards
 from keyboards.users_keyboard.users_inline import add_order_kb, order_confirm_kb
 from keyboards.users_keyboard.users_reply import cancel
@@ -134,6 +135,7 @@ async def confirm_order(callback: CallbackQuery, state: FSMContext):
     if response.get("order"):
         order_id = response.get("order")
         await callback.message.edit_text(f"✅ Buyurtma qabul qilindi!\n\n🆔 Buyurtma raqami: {order_id}")
+        await add_order_db(order_id, service_id, amount, link, callback.from_user.id)
     else:
         error_text = response.get("error", "Nomaʼlum xatolik yuz berdi.")
         if error_text == "neworder.error.link_duplicate":
