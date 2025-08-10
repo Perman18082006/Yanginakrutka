@@ -59,7 +59,7 @@ async def add_order_handler(callback: CallbackQuery, state: FSMContext):
     await state.update_data(service_id=service_id)
     min = data.get("min", 0)
     max = data.get("max", 0)
-    await callback.message.answer(f"✅ Xizmat miqdorini kiriting:\n\nMin: {min}\n🔼Max: {max}")
+    await callback.message.answer(f"✅ Xizmat miqdorini kiriting:\n\n🔽Min: {min}\n🔼Max: {max}")
     await state.set_state(Buyurtma.amount)
     await callback.answer()
 
@@ -80,7 +80,6 @@ async def process_amount(message: Message, state: FSMContext):
     await state.update_data(amount=amount)
     await message.answer("✅ Xizmat linkini kiriting:")
     await state.set_state(Buyurtma.link)
-    await callback.answer()
 
 
 # Linkni tekshirish
@@ -106,7 +105,7 @@ async def process_link(message: Message, state: FSMContext):
 ⚡️Xizmat nomi: {xizmat_nomi}
 🔽Miqdor: {amount}
 🔗Link: {link}
-💵 Narxi: {narx} so'm har 1000 tasi uchun""", reply_markup=await order_confirm_kb())
+💵 Narxi: {narx} so'm har 1000 tasi uchun""", reply_markup=await order_confirm_kb(), disable_web_page_preview=True)
     await state.set_state(Buyurtma.confirm)
 
 @router.callback_query(Buyurtma.confirm, F.data == "confirm_order")
@@ -117,10 +116,17 @@ async def confirm_order(callback: CallbackQuery, state: FSMContext):
     link = data.get("link")
     response = await add_order(service_id, link, amount)
     if response.get("order"):
-        await callback.message.edit_text("✅ Buyurtma qabul qilindi!")
-    elif response.get("error"):
-        await callback.message.edit_text(f"❌ Xato: {response.get('error')}")
+        order_id = response.get("order")
+        await callback.message.edit_text(f"✅ Buyurtma qabul qilindi!\n\n🆔 Buyurtma raqami: {order_id}")
     else:
-        await callback.message.edit_text("❌ Buyurtma qabul qilinmadi!")
+        error_text = response.get("error", "Nomaʼlum xatolik yuz berdi.")
+        if error_text == "neworder.error.link_duplicate":
+            await callback.message.edit_text("❌ Bu link uchun buyurtma allaqachon yuborilgan. Iltimos, boshqa link kiriting yoki biroz kutib qayta urinib ko‘ring.")
+        elif error_text == "not_enough_funds":
+            await callback.message.edit_text("❌ API balans yetarli emas")
+        else:
+            await callback.message.edit_text(f"❌ Xatolik: {error_text}")
+
     await state.clear()
     await callback.answer()
+            
