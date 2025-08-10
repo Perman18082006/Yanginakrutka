@@ -23,13 +23,19 @@ async def final_choice(callback: CallbackQuery):
     # Agar data None bo'lsa, xato xabarini ko'rsatish
     if data is None:
         await callback.message.edit_text("❌ Bu xizmat API da mavjud emas!")
-        await callback.answer()
+        try:
+            await callback.answer()
+        except Exception:
+            pass
         return
 
     service_data = await get_service_by_id(service_id)
     if service_data is None:
         await callback.message.edit_text("❌ Xizmat topilmadi!")
-        await callback.answer()
+        try:
+            await callback.answer()
+        except Exception:
+            pass
         return
 
     xizmat_nomi = service_data.get("xizmat_nomi", "Noma'lum")
@@ -43,7 +49,10 @@ async def final_choice(callback: CallbackQuery):
 🔼Max: {max_value} 
 
 💵 Narxi: {narx} so'm har 1000 tasi uchun""", reply_markup=await add_order_kb(service_id))
-    await callback.answer()
+    try:
+        await callback.answer()
+    except Exception:
+        pass
 
 
 
@@ -54,7 +63,10 @@ async def add_order_handler(callback: CallbackQuery, state: FSMContext):
     data = await get_service_limits(service_id)
     if data is None:
         await callback.message.edit_text("❌ Bu xizmat API da mavjud emas!")
-        await callback.answer()
+        try:
+            await callback.answer()
+        except Exception:
+            pass
         return
 
     await state.update_data(service_id=service_id)
@@ -62,7 +74,10 @@ async def add_order_handler(callback: CallbackQuery, state: FSMContext):
     max = data.get("max", 0)
     await callback.message.answer(f"✅ Xizmat miqdorini kiriting:\n\n🔽Min: {min}\n🔼Max: {max}", reply_markup=cancel)
     await state.set_state(Buyurtma.amount)
-    await callback.answer()
+    try:
+        await callback.answer()
+    except Exception:
+        pass
 
 @router.message(Buyurtma.amount)
 async def process_amount(message: Message, state: FSMContext):
@@ -129,4 +144,7 @@ async def confirm_order(callback: CallbackQuery, state: FSMContext):
             await callback.message.edit_text(f"❌ Xatolik: {error_text}")
 
     await state.clear()
-    await callback.answer()
+    try:
+        await callback.answer()
+    except Exception:
+        pass

@@ -95,4 +95,7 @@ async def back_handler(callback: CallbackQuery, state: FSMContext):
     await callback.message.answer("🏠Asosiy menyudasiz", reply_markup=menu)
     await callback.message.delete()
     await state.clear()
-    await callback.answer()
+    try:
+        await callback.answer()
+    except Exception:
+        pass

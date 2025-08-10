@@ -25,7 +25,10 @@ async def select_bolim(callback: CallbackQuery):
     else:
         await callback.message.edit_text("🚫Bo‘limlar mavjud emas!")
 
-    await callback.answer()
+    try:
+        await callback.answer()
+    except Exception:
+        pass
 
 # Xizmatlar chiqarish
 @router.callback_query(F.data.startswith("bolim:"))
@@ -38,7 +41,10 @@ async def select_xizmat(callback: CallbackQuery, state: FSMContext):
     else:
         await callback.message.edit_text("🚫Xizmatlar mavjud emas!")
 
-    await callback.answer()
+    try:
+        await callback.answer()
+    except Exception:
+        pass
 
 
 # Xizmat haqida ma'lumot
@@ -51,7 +57,10 @@ async def back_to_category(callback: CallbackQuery):
         await callback.message.edit_text("🖇Quyidagilardan tarmoqlardan birini tanlang:", reply_markup=keyboard)
     else:
         await callback.message.edit_text("🚫Kategoriyalar mavjud emas!")
-    await callback.answer()
+    try:
+        await callback.answer()
+    except Exception:
+        pass
 
 # Ortga: xizmat -> bolim
 @router.callback_query(F.data.startswith("back:bolim:"))
@@ -62,7 +71,10 @@ async def back_to_bolim(callback: CallbackQuery):
         await callback.message.edit_text(f"🖇Quyidagi xizmatlardan birini tanlang: ({category})", reply_markup=keyboard)
     else:
         await callback.message.edit_text("🚫Bo‘limlar mavjud emas!")
-    await callback.answer()
+    try:
+        await callback.answer()
+    except Exception:
+        pass
 
 @router.callback_query(F.data == "back_xizmatlar")
 async def back_to_xizmatlar(callback: CallbackQuery, state: FSMContext):
@@ -74,4 +86,7 @@ async def back_to_xizmatlar(callback: CallbackQuery, state: FSMContext):
         await callback.message.edit_text(f"✅O'zingizga kerakli xizmatni tanlang: ({category} → {bolim})", reply_markup=keyboard)
     else:
         await callback.message.edit_text("🚫Xizmatlar mavjud emas!")
-
+    try:
+        await callback.answer()
+    except Exception:
+        pass
