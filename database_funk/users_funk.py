@@ -24,8 +24,8 @@ async def create_users_order():
     async with aiosqlite.connect(DB_NAME) as db:
         await db.execute("""
             CREATE TABLE IF NOT EXISTS users_order (
-                user_id INTEGER PRIMARY KEY,
-                order_id INTEGER,
+                user_id INTEGER,
+                order_id INTEGER PRIMARY KEY,
                 xizmat_turi TEXT,
                 link TEXT,
                 amount INTEGER,
