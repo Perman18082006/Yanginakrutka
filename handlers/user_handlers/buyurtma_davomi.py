@@ -82,21 +82,28 @@ async def add_order_handler(callback: CallbackQuery, state: FSMContext):
 
 @router.message(Buyurtma.amount)
 async def process_amount(message: Message, state: FSMContext):
-    amount = message.text
-    if not amount.isdigit():
-        await message.answer("❌ Miqdorni raqamda kiriting!")
-        return
-    data = await state.get_data()
-    service_id = data.get("service_id")
-    limits = await get_service_limits(service_id)
-    min = limits.get("min", 0)
-    max = limits.get("max", 0)
-    if int(amount) < min or int(amount) > max:
-        await message.answer(f"❌ Miqdor {min} dan {max} gacha bo'lishi kerak!")
-        return
-    await state.update_data(amount=amount)
-    await message.answer("✅ Xizmat linkini kiriting:")
-    await state.set_state(Buyurtma.link)
+    try:
+        amount = message.text
+        if not amount.isdigit():
+            await message.answer("❌ Miqdorni raqamda kiriting!")
+            return
+        data = await state.get_data()
+        service_id = data.get("service_id")
+        limits = await get_service_limits(service_id)
+        if limits is None:
+            await message.answer("❌ Bu xizmat API da mavjud emas!")
+            return
+        min = limits.get("min", 0)
+        max = limits.get("max", 0)
+        if int(amount) < min or int(amount) > max:
+            await message.answer(f"❌ Miqdor {min} dan {max} gacha bo'lishi kerak!")
+            return
+        await state.update_data(amount=amount)
+        await message.answer("✅ Xizmat linkini kiriting:")
+        await state.set_state(Buyurtma.link)
+    except Exception as e:
+        print(f"process_amount xatolik: {e}")
+        await message.answer("❌ Xatolik yuz berdi!")
 
 
 # Linkni tekshirish
