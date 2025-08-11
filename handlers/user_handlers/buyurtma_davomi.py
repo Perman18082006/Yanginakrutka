@@ -117,7 +117,7 @@ async def process_link(message: Message, state: FSMContext):
     service_data = await get_service_by_id(service_id)
     xizmat_nomi = service_data.get("xizmat_nomi", "Noma'lum")
     narx = service_data.get("narxi", "Noma'lum")
-    price = int(amount) * int(narx) / 1000
+    price = int(int(amount) * int(narx) / 1000)
     await state.update_data(xizmat_nomi=xizmat_nomi, price=price)
     await message.answer(f"""✅ Buyurtma tasdiqlash:
 🆔Xizmat raqami: {service_id}

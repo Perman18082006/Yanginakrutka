@@ -61,7 +61,7 @@ async def xizmat_qoshish_narxi(message: Message, state: FSMContext):
     if int(narxi) < 0:
         await message.answer("Narxi manfiy bo'lishi mumkin emas")
         return
-    narxi = float(narxi)
+    narxi = int(narxi)
     await state.update_data(narxi=narxi)
     await message.answer("Tavsifini kiriting")
     await state.set_state(Xizmat_qosh.tavsif)
