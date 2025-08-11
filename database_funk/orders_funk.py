@@ -5,7 +5,7 @@ async def create_services_table():
     async with aiosqlite.connect(ORDER_DB) as db:
         await db.execute("""
         CREATE TABLE IF NOT EXISTS services (
-            service_id INTEGER PRIMARY KEY,
+            service_id INTEGER,
             categoria_nomi TEXT NOT NULL,
             bolim_nomi TEXT NOT NULL,
             xizmat_nomi TEXT NOT NULL,
@@ -61,18 +61,18 @@ async def get_xizmatlar(category, bolim):
 
 # Xizmatlarni tahrirlash
 
-async def edit_service(service_id: int, **kwargs):
+async def edit_service(target_id: int, **kwargs):
     """
-    Berilgan service_id bo'yicha kerakli maydonlarni yangilash.
+    Berilgan target_id bo'yicha kerakli maydonlarni yangilash.
     Bo'sh string kiritilsa yoki maydon berilmasa, o'zgarishsiz qoladi.
     """
-    fields = ["service_id",  "categoria_nomi", "bolim_nomi", "xizmat_nomi", "narxi", "tavsif"]
+    fields = ["service_id", "categoria_nomi", "bolim_nomi", "xizmat_nomi", "narxi", "tavsif"]
 
     # Bo'sh string => None
     values = [
         kwargs.get(f) if kwargs.get(f) not in ("", None) else None
         for f in fields
-    ] + [service_id]
+    ] + [target_id]
 
     async with aiosqlite.connect(ORDER_DB) as db:
         await db.execute(f"""
@@ -86,7 +86,6 @@ async def edit_service(service_id: int, **kwargs):
             WHERE service_id = ?
         """, values)
         await db.commit()
-
 async def delete_service(service_id: int):
     """
     Berilgan service_id bo'yicha xizmatni o'chirish.

@@ -90,6 +90,9 @@ async def process_amount(message: Message, state: FSMContext):
             return
         min = limits.get("min", 0)
         max = limits.get("max", 0)
+        if min == None or max == None:
+            await message.answer("❌ Bu xizmat API da mavjud emas!")
+            return
         if int(amount) < min or int(amount) > max:
             await message.answer(f"❌ Miqdor {min} dan {max} gacha bo'lishi kerak!")
             return

@@ -28,7 +28,7 @@ async def build_category_keyboard():
         for cat in categories:
             builder.button(text=cat, callback_data=f"cat:{cat}")
         builder.button(text="⬅️ Ortga", callback_data="back")
-        builder.adjust(1)
+        builder.adjust(2)
         return builder.as_markup()
     else:
         return False

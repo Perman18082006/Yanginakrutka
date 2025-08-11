@@ -1,4 +1,4 @@
-BOT_TOKEN = "7002570947:AAEPaTfgtnRwsX_VzDTJplBxerNPqi2HfCc"
+BOT_TOKEN = "8050417005:AAHfq-mvljuf92GBdSw9j3UO4CONFk2FbKg"
 
 DB_NAME = "database/users.db"
 
