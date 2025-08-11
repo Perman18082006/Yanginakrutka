@@ -76,8 +76,9 @@ async def tahrir_service_id_handler(message: Message, state: FSMContext):
         return
     data = await state.get_data()
     eski_id = data['xizmat_id']
-    await edit_service(eski_id, service_id=service_id)
+    await edit_service(eski_id, service_id=int(service_id))
     await message.answer("Yangi service ID qabul qilindi!")
+    await state.clear()
 
 @router.message(Xizmat_tahrir.kategoriya)
 async def tahrir_kategoriya_handler(message: Message, state: FSMContext):
