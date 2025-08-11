@@ -13,12 +13,14 @@ class Xizmat_id(StatesGroup):
     xizmat_id = State()
 
 class Xizmat_tahrir(StatesGroup):
+    service_id = State()
     kategoriya = State()
     bolim = State()
     xizmat = State()
     narx = State()
     tavsif = State()
     tasdiqlash = State()
+    delete = State()
 
 class API_qosh(StatesGroup):
     api_url = State()

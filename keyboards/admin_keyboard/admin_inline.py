@@ -38,6 +38,9 @@ xizmat_tah_qosh = InlineKeyboardMarkup(
 tahrir_ustun = InlineKeyboardMarkup(
         inline_keyboard=[
             [
+                InlineKeyboardButton(text="📝 Service ID", callback_data="tahrir_service_id")
+            ],
+            [
                 InlineKeyboardButton(text="📝 Kategoriya", callback_data="tahrir_kategoriya"),
                 InlineKeyboardButton(text="📝 Bo'lim", callback_data="tahrir_bolim")
             ],
@@ -47,6 +50,9 @@ tahrir_ustun = InlineKeyboardMarkup(
             ],
             [
                 InlineKeyboardButton(text="📝 Tavsif", callback_data="tahrir_tavsif")
+            ],
+            [
+                InlineKeyboardButton(text="❌️O'chirish", callback_data="tahrir_delete")
             ]
         ]
 )

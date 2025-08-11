@@ -8,7 +8,7 @@ from keyboards.admin_keyboard.admin_reply import boshqaruv
 # States
 from .admin_states import Xizmat_tahrir, Xizmat_id
 # Database funk
-from database_funk.orders_funk import edit_service
+from database_funk.orders_funk import edit_service, delete_service
 # Filter
 from filters import IsAdmin
 
@@ -43,7 +43,10 @@ async def xizmat_id_handler(message: Message, state: FSMContext):
 @router.callback_query(F.data.startswith("tahrir_"))
 async def tahrir_ustun_handler(callback: CallbackQuery, state: FSMContext):
     tahrir_data = callback.data.split("_")[1]
-    if tahrir_data == "kategoriya":
+    if tahrir_data == "service_id":
+        await state.set_state(Xizmat_tahrir.service_id)
+        await callback.message.answer("Yangi service ID ni kiriting")
+    elif tahrir_data == "kategoriya":
         await state.set_state(Xizmat_tahrir.kategoriya)
         await callback.message.answer("Yangi kategoriya nomini kiriting")
     elif tahrir_data == "bolim":
@@ -58,7 +61,19 @@ async def tahrir_ustun_handler(callback: CallbackQuery, state: FSMContext):
     elif tahrir_data == "tavsif":
         await state.set_state(Xizmat_tahrir.tavsif)
         await callback.message.answer("Yangi tavsifni kiriting")
+    elif tahrir_data == "delete":
+        data = await state.get_data()
+        service_id = data['xizmat_id']
+        await delete_service(service_id)
+        await callback.message.answer("Xizmat o'chirildi!")
     await callback.answer()
+
+@router.message(Xizmat_tahrir.service_id)
+async def tahrir_service_id_handler(message: Message, state: FSMContext):
+    data = await state.get_data()
+    service_id = data['xizmat_id']
+    await edit_service(service_id, service_id=message.text)
+    await message.answer("Yangi service ID qabul qilindi!")
 
 @router.message(Xizmat_tahrir.kategoriya)
 async def tahrir_kategoriya_handler(message: Message, state: FSMContext):

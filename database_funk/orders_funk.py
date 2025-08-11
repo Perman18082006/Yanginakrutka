@@ -66,7 +66,7 @@ async def edit_service(service_id: int, **kwargs):
     Berilgan service_id bo'yicha kerakli maydonlarni yangilash.
     Bo'sh string kiritilsa yoki maydon berilmasa, o'zgarishsiz qoladi.
     """
-    fields = ["categoria_nomi", "bolim_nomi", "xizmat_nomi", "narxi", "tavsif"]
+    fields = ["service_id",  "categoria_nomi", "bolim_nomi", "xizmat_nomi", "narxi", "tavsif"]
 
     # Bo'sh string => None
     values = [
@@ -77,6 +77,7 @@ async def edit_service(service_id: int, **kwargs):
     async with aiosqlite.connect(ORDER_DB) as db:
         await db.execute(f"""
             UPDATE services SET
+                service_id = COALESCE(?, service_id),
                 categoria_nomi = COALESCE(?, categoria_nomi),
                 bolim_nomi     = COALESCE(?, bolim_nomi),
                 xizmat_nomi    = COALESCE(?, xizmat_nomi),
@@ -85,6 +86,16 @@ async def edit_service(service_id: int, **kwargs):
             WHERE service_id = ?
         """, values)
         await db.commit()
+
+async def delete_service(service_id: int):
+    """
+    Berilgan service_id bo'yicha xizmatni o'chirish.
+    """
+    async with aiosqlite.connect(ORDER_DB) as db:
+        await db.execute("DELETE FROM services WHERE service_id = ?", (service_id,))
+        await db.commit()
+
+
 
 
 async def get_service_by_id(service_id: int) -> dict | None:
