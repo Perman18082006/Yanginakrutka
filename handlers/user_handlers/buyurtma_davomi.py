@@ -18,42 +18,37 @@ router = Router()
 # Xizmat tanlandi
 @router.callback_query(F.data.startswith("xizmat:"))
 async def final_choice(callback: CallbackQuery):
-    service_id = int(callback.data.split(":")[1])
-    data = await get_service_limits(service_id)
-
-    # Agar data None bo'lsa, xato xabarini ko'rsatish
-    if data is None:
-        await callback.message.edit_text("❌ Bu xizmat API da mavjud emas!")
-        try:
+    try:
+        service_id = int(callback.data.split(":")[1])
+        
+        # Single API call to get both service data and limits
+        service_data = await get_service_by_id(service_id)
+        if service_data is None:
+            await callback.message.edit_text("❌ Xizmat topilmadi!")
             await callback.answer()
-        except Exception:
-            pass
-        return
+            return
 
-    service_data = await get_service_by_id(service_id)
-    if service_data is None:
-        await callback.message.edit_text("❌ Xizmat topilmadi!")
-        try:
+        data = await get_service_limits(service_id)
+        if data is None:
+            await callback.message.edit_text("❌ Bu xizmat API da mavjud emas!")
             await callback.answer()
-        except Exception:
-            pass
-        return
+            return
 
-    xizmat_nomi = service_data.get("xizmat_nomi", "Noma'lum")
-    narx = service_data.get("narxi", "Noma'lum")
-    min_value = data.get("min", "Noma'lum")
-    max_value = data.get("max", "Noma'lum")
+        xizmat_nomi = service_data.get("xizmat_nomi", "Noma'lum")
+        narx = service_data.get("narxi", "Noma'lum")
+        min_value = data.get("min", "Noma'lum")
+        max_value = data.get("max", "Noma'lum")
 
-    await callback.message.edit_text(f"""🆔Xizmat raqami: {service_id}
+        await callback.message.edit_text(f"""🆔Xizmat raqami: {service_id}
 ⚡️Xizmat nomi: {xizmat_nomi}
 🔽Min: {min_value}
 🔼Max: {max_value} 
 
 💵 Narxi: {narx} so'm har 1000 tasi uchun""", reply_markup=await add_order_kb(service_id))
-    try:
         await callback.answer()
-    except Exception:
-        pass
+    except Exception as e:
+        print(f"final_choice error: {e}")
+        await callback.answer("❌ Xatolik yuz berdi")
 
 
 

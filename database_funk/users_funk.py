@@ -6,6 +6,12 @@ from zoneinfo import ZoneInfo
 # Config
 from config import DB_NAME
 
+# Connection pool for better performance
+_db_pool = None
+
+async def get_db_connection():
+    return await aiosqlite.connect(DB_NAME)
+
 # 🧱 Foydalanuvchilar uchun jadval yaratadi: user_id, balance, referal_id, referal_count
 async def create_users_db():
     async with aiosqlite.connect(DB_NAME) as db:

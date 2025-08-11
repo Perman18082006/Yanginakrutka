@@ -49,7 +49,12 @@ async def main():
     await create_services_table()
     # Start bot
     logging.info("Starting bot...")
-    await dp.start_polling(bot)
+    await dp.start_polling(
+        bot,
+        polling_timeout=20,  # Increase polling timeout
+        request_timeout=10,  # Add request timeout
+        skip_updates=True    # Skip old updates on startup
+    )
 
 if __name__ == '__main__':
     logging.basicConfig(level=logging.INFO)

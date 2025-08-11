@@ -1,6 +1,17 @@
 import aiohttp
+import asyncio
 # Config
 from config import API_KEY, API_URL
+
+# Global session for better performance
+_session = None
+
+async def get_session():
+    global _session
+    if _session is None or _session.closed:
+        timeout = aiohttp.ClientTimeout(total=10)  # 10 second timeout
+        _session = aiohttp.ClientSession(timeout=timeout)
+    return _session
 
 async def make_post_request(action: str, params: dict = {}) -> dict:
     payload = {
@@ -8,9 +19,12 @@ async def make_post_request(action: str, params: dict = {}) -> dict:
         "action": action,
         **params
     }
-    async with aiohttp.ClientSession() as session:
+    session = await get_session()
+    try:
         async with session.post(API_URL, data=payload) as response:
             return await response.json()
+    except asyncio.TimeoutError:
+        return {"error": "API timeout"}
             
 # Rate olish
 async def get_rate_by_service_id(service_id: int) -> int | None:
