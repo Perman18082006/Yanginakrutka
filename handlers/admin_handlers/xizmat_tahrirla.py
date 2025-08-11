@@ -43,7 +43,7 @@ async def xizmat_id_handler(message: Message, state: FSMContext):
 @router.callback_query(F.data.startswith("tahrir_"))
 async def tahrir_ustun_handler(callback: CallbackQuery, state: FSMContext):
     tahrir_data = callback.data.split("_")[1]
-    if tahrir_data == "service_id":
+    if tahrir_data == "serviceid":
         await state.set_state(Xizmat_tahrir.service_id)
         await callback.message.answer("Yangi service ID ni kiriting")
     elif tahrir_data == "kategoriya":
@@ -66,28 +66,18 @@ async def tahrir_ustun_handler(callback: CallbackQuery, state: FSMContext):
         service_id = data['xizmat_id']
         await delete_service(service_id)
         await callback.message.answer("Xizmat o'chirildi!")
-        await state.clear()
     await callback.answer()
 
 @router.message(Xizmat_tahrir.service_id)
 async def tahrir_service_id_handler(message: Message, state: FSMContext):
-    # Yangi service ID ni tekshirish
-    new_service_id = message.text
-    if not new_service_id.isdigit():
+    service_id = message.text
+    if not service_id.isdigit():
         await message.answer("Service ID faqat raqamlardan iborat bo'lishi kerak")
         return
-    if int(new_service_id) < 0:
-        await message.answer("Service ID manfiy bo'lishi mumkin emas")
-        return
-    
-    # Mavjud ma'lumotlarni olish
     data = await state.get_data()
-    old_service_id = data['xizmat_id']
-    
-    # Service ID ni yangilash
-    await edit_service(old_service_id, service_id=int(new_service_id))
-    await message.answer("Yangi service ID muvaffaqiyatli qabul qilindi!")
-    await state.clear()
+    eski_id = data['xizmat_id']
+    await edit_service(eski_id, service_id=service_id)
+    await message.answer("Yangi service ID qabul qilindi!")
 
 @router.message(Xizmat_tahrir.kategoriya)
 async def tahrir_kategoriya_handler(message: Message, state: FSMContext):
