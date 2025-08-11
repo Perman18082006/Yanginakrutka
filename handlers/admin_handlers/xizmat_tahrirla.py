@@ -66,14 +66,28 @@ async def tahrir_ustun_handler(callback: CallbackQuery, state: FSMContext):
         service_id = data['xizmat_id']
         await delete_service(service_id)
         await callback.message.answer("Xizmat o'chirildi!")
+        await state.clear()
     await callback.answer()
 
 @router.message(Xizmat_tahrir.service_id)
 async def tahrir_service_id_handler(message: Message, state: FSMContext):
+    # Yangi service ID ni tekshirish
+    new_service_id = message.text
+    if not new_service_id.isdigit():
+        await message.answer("Service ID faqat raqamlardan iborat bo'lishi kerak")
+        return
+    if int(new_service_id) < 0:
+        await message.answer("Service ID manfiy bo'lishi mumkin emas")
+        return
+    
+    # Mavjud ma'lumotlarni olish
     data = await state.get_data()
-    service_id = data['xizmat_id']
-    await edit_service(service_id, service_id=message.text)
-    await message.answer("Yangi service ID qabul qilindi!")
+    old_service_id = data['xizmat_id']
+    
+    # Service ID ni yangilash
+    await edit_service(old_service_id, service_id=int(new_service_id))
+    await message.answer("Yangi service ID muvaffaqiyatli qabul qilindi!")
+    await state.clear()
 
 @router.message(Xizmat_tahrir.kategoriya)
 async def tahrir_kategoriya_handler(message: Message, state: FSMContext):
