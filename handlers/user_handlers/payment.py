@@ -66,6 +66,10 @@ async def process_payment_receipt(message: Message, state: FSMContext):
     await state.clear()
     # To'lovni adminlarga yuborish
     for admin in ADMIN_IDS:
-        await message.bot.send_photo(admin, receipt, caption=f"To'lov turi: {payment_method}\nTo'lov miqdori: {amount} so'm\nTo'lovchi: {message.from_user.id}", reply_markup=admin_tasdiqla(user_id, amount))
+        try:
+            await message.bot.send_photo(admin, receipt, caption=f"To'lov turi: {payment_method}\nTo'lov miqdori: {amount} so'm\nTo'lovchi: {message.from_user.id}", reply_markup=admin_tasdiqla(user_id, amount))
+        except Exception as e:
+            print(f"Admin {admin} ga xabar yuborishda xatolik: {e}")
+            continue
 
 
