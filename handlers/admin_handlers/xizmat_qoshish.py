@@ -12,10 +12,16 @@ router = Router()
 
 @router.callback_query(F.data == "xizmat_qoshish")
 async def xizmat_qoshish_handler(callback: CallbackQuery, state: FSMContext):
-    await callback.message.delete()
+    try:
+        await callback.message.delete()
+    except Exception:
+        pass
     await callback.message.answer("Service ID kiriting", reply_markup=boshqaruv)
     await state.set_state(Xizmat_qosh.service_id)
-    await callback.answer()
+    try:
+        await callback.answer()
+    except Exception:
+        pass
 
 @router.message(Xizmat_qosh.service_id)
 async def xizmat_qoshish_service_id(message: Message, state: FSMContext):
@@ -89,4 +95,7 @@ async def xizmat_qoshish_tasdiqla_handler(callback: CallbackQuery, state: FSMCon
     )
     await callback.message.answer("Xizmat muvaffaqiyatli qo'shildi!")
     await state.clear()
-    await callback.answer()
+    try:
+        await callback.answer()
+    except Exception:
+        pass
