@@ -9,10 +9,10 @@ async def create_services_table():
             categoria_nomi TEXT NOT NULL,
             bolim_nomi TEXT NOT NULL,
             xizmat_nomi TEXT NOT NULL,
-            narxi REAL NOT NULL,
+            narxi INTEGER NOT NULL,
             tavsif TEXT,
             buyurtma_soni INTEGER DEFAULT 0,
-            sarflangan_summa REAL DEFAULT 0.0
+            sarflangan_summa INTEGER DEFAULT 0
         )
         """)
         await db.commit()
@@ -108,9 +108,9 @@ async def get_service_by_id(service_id: int) -> dict | None:
             "categoria_nomi": row[1],
             "bolim_nomi": row[2],
             "xizmat_nomi": row[3],
-            "narxi": float(row[4]),
+            "narxi": int(row[4]),
             "tavsif": row[5],
             "buyurtma_soni": row[6],
-            "sarflangan_summa": float(row[7])
+            "sarflangan_summa": int(row[7])
         }
     return None
