@@ -19,7 +19,9 @@ async def buyurtmalar(message: Message, state: FSMContext):
     msg = "🔍 Buyurtmalarim:\n\n"
     for order in orders:
         status = await get_order_status(order['order_id'])
-        if status.get("status") == "Completed":
+        if status.get("error"):
+            status_text = "❌ Xatolik"
+        elif status.get("status") == "Completed":
             status_text = "✅ Bajarildi"
         elif status.get("status") == "In progress":
             status_text = "⏳ Bajarilmoqda"

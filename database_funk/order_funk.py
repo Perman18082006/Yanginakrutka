@@ -92,5 +92,16 @@ async def get_order_status(order_id: int):
     }
     async with aiohttp.ClientSession() as session:
         async with session.post(API_URL, data=payload) as response:
-            data = await response.json()
-            return data
+            if response.status != 200:
+                return {"error": f"HTTP {response.status}"}
+            
+            content_type = response.headers.get('Content-Type', '')
+            if 'application/json' not in content_type:
+                text_response = await response.text()
+                return {"error": f"API xatosi: {text_response[:200]}"}
+            
+            try:
+                data = await response.json()
+                return data
+            except Exception as e:
+                return {"error": f"JSON parse xatosi: {str(e)}"}
