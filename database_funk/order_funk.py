@@ -95,3 +95,16 @@ async def get_service_limits(service_id: int):
             }
 
     return {"min": None, "max": None}
+
+async def get_status_order(order_id: int):
+    """
+    Buyurtma holatini tekshirish
+    """
+    async with aiohttp.ClientSession() as session:
+        payload = {
+            "key": API_KEY,
+            "action": "status",
+            "order": order_id
+        }
+        async with session.post(API_URL, data=payload) as resp:
+            return await resp.json()
