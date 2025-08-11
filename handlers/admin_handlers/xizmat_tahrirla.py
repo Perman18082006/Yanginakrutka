@@ -70,13 +70,13 @@ async def tahrir_ustun_handler(callback: CallbackQuery, state: FSMContext):
 
 @router.message(Xizmat_tahrir.service_id)
 async def tahrir_service_id_handler(message: Message, state: FSMContext):
-    service_id = message.text
-    if not service_id.isdigit():
+    yangi_id = message.text
+    if not yangi_id.isdigit():
         await message.answer("Service ID faqat raqamlardan iborat bo'lishi kerak")
         return
     data = await state.get_data()
-    eski_id = data['xizmat_id']
-    await edit_service(eski_id, service_id=int(service_id))
+    eski_id = int(data['xizmat_id'])
+    await edit_service(eski_id, service_id=int(yangi_id))
     await message.answer("Yangi service ID qabul qilindi!")
     await state.clear()
 
