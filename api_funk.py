@@ -13,11 +13,11 @@ async def make_post_request(action: str, params: dict = {}) -> dict:
             return await response.json()
             
 # Rate olish
-async def get_rate_by_service_id(service_id: int) -> float | None:
+async def get_rate_by_service_id(service_id: int) -> int | None:
     services = await make_post_request("services")
     for service in services:
         if service.get("service") == service_id:
-            return float(service["rate"])
+            return int(float(service["rate"]))
     return None  # Agar topilmasa
 
 
