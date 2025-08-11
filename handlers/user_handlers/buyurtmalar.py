@@ -16,9 +16,9 @@ async def buyurtmalar(message: Message, state: FSMContext):
     if not orders:
         await message.answer("Sizda hali buyurtma yo'q!")
         return
-    msg = "🔍 Buyurtmalarim:\n\n"
+    msg = "🔍 Buyurtmalarim:\n"
     for order in orders:
-        status = await get_order_status(order['order_id'])
+        status = await get_order_status(int(order['order_id']))
         if status.get("error"):
             status_text = "❌ Xatolik"
         elif status.get("status") == "Completed":
