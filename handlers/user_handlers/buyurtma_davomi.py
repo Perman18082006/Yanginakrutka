@@ -6,7 +6,8 @@ import re
 # Database funk
 from database_funk.orders_funk import get_service_by_id
 from database_funk.order_funk import get_service_limits, add_order
-from database_funk.users_funk import add_order_db
+from database_funk.users_funk import add_order_db, get_user_data
+
 # Keyboards
 from keyboards.users_keyboard.users_inline import add_order_kb, order_confirm_kb
 from keyboards.users_keyboard.users_reply import cancel
@@ -17,7 +18,7 @@ router = Router()
 
 # Xizmat tanlandi
 @router.callback_query(F.data.startswith("xizmat:"))
-async def final_choice(callback: CallbackQuery):
+async def final_choice(callback: CallbackQuery, state: FSMContext):
     try:
         service_id = int(callback.data.split(":")[1])
         
@@ -38,6 +39,7 @@ async def final_choice(callback: CallbackQuery):
         narx = service_data.get("narxi", "Noma'lum")
         min_value = data.get("min", "Noma'lum")
         max_value = data.get("max", "Noma'lum")
+        await state.update_data(narx=narx)
 
         await callback.message.edit_text(f"""🆔Xizmat raqami: {service_id}
 ⚡️Xizmat nomi: {xizmat_nomi}
@@ -95,6 +97,14 @@ async def process_amount(message: Message, state: FSMContext):
             return
         if int(amount) < min or int(amount) > max:
             await message.answer(f"❌ Miqdor {min} dan {max} gacha bo'lishi kerak!")
+            return
+        user_data = await get_user_data(message.from_user.id)
+        balance = user_data.get("balance", 0)
+        data = await state.get_data()
+        narx = data.get("narx")
+        price = int(int(amount) * int(narx) / 1000)
+        if balance < price:
+            await message.answer(f"❌ Balansingiz yetarli emas!\n\n💵 Narxi: {price} so'm\n💰 Balansingiz: {balance} so'm")
             return
         await state.update_data(amount=amount)
         await message.answer("✅ Xizmat linkini kiriting:")
