@@ -32,8 +32,9 @@ async def start_deeplink_handler(message: Message, command: CommandObject, state
         if temp_id != user_id:
             referal_id = temp_id
 
-    # Foydalanuvchi mavjud emas bo'lsa qo'shish
-    if not await user_exists(user_id):
+    # Foydalanuvchi mavjud emas bo'lsa qo'shish (optimizatsiya qilingan)
+    user_exists_result = await user_exists(user_id)
+    if not user_exists_result:
         await add_user(user_id, referal_id)
 
         # Referalga xabar yuborish

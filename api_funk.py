@@ -9,8 +9,18 @@ _session = None
 async def get_session():
     global _session
     if _session is None or _session.closed:
-        timeout = aiohttp.ClientTimeout(total=10)  # 10 second timeout
-        _session = aiohttp.ClientSession(timeout=timeout)
+        timeout = aiohttp.ClientTimeout(total=5, connect=2)  # Tezroq timeout
+        connector = aiohttp.TCPConnector(
+            limit=100,
+            limit_per_host=10,
+            keepalive_timeout=30,
+            enable_cleanup_closed=True
+        )
+        _session = aiohttp.ClientSession(
+            timeout=timeout, 
+            connector=connector,
+            trust_env=True
+        )
     return _session
 
 async def make_post_request(action: str, params: dict = {}) -> dict:
