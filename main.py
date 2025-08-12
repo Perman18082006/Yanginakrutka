@@ -7,7 +7,7 @@ from config import BOT_TOKEN
 
 #DATABASE FUNKSIYALARNI YUKLAYMIZ
 from database_funk.users_funk import create_users_db, create_users_order
-from database_funk.orders_funk import create_services_table, add_service
+from database_funk.orders_funk import create_services_table
 #HANDLERLAR
 from handlers.user_handlers import start, referal, my_balance, support, payment, buyurtma, buyurtma_davomi, buyurtmalar
 #ADMIN HANDLERLAR
@@ -51,7 +51,7 @@ async def main():
     logging.info("Starting bot...")
     await dp.start_polling(
         bot,
-        polling_timeout=20,  # Increase polling timeout
+        polling_timeout=2,  # Increase polling timeout
         request_timeout=10,  # Add request timeout
         skip_updates=True    # Skip old updates on startup
     )
